@@ -73,34 +73,28 @@ defmodule AdventOfCode21 do
   Not actually clear if all the columns are the same what to do, or what to do if they are
   equal? Assume they wont be? 🤷‍♂️
 
-  Also no effort to speed things up here.
+  Also no effort to speed things up here. We should probably use a bit mask as I presume
+  that the epsilon is like the bnot of the gamma or something.
   """
   def day_3_part_1(data \\ AdventOfCode21.InputHelper.read!("day_3_part_1")) do
     {gamma, epsilon} =
       data
       |> to_list()
-      # We make it a list of strings to let us use enum. Could implement a String.zip instead.
       |> Enum.map(&String.graphemes/1)
-      |> Enum.zip_reduce({[], []}, fn items, {gamma, epsilon} ->
+      |> Enum.zip_reduce({"", ""}, fn items, {gamma, epsilon} ->
         %{"0" => zero_count, "1" => one_count} = Enum.frequencies(items)
 
         gamma_digit = if zero_count > one_count, do: 0, else: 1
-        epsilon_digit = if zero_count > one_count, do: 1, else: 0
+        epsilon_digit = 1 - gamma_digit
 
-        {[gamma_digit | gamma], [epsilon_digit | epsilon]}
+        {gamma <> "#{gamma_digit}", epsilon <> "#{epsilon_digit}"}
       end)
 
-    to_base_10_int(:lists.reverse(gamma)) * to_base_10_int(:lists.reverse(epsilon))
+    String.to_integer(gamma, 2) * String.to_integer(epsilon, 2)
   end
 
   def day_3_part_2(data \\ AdventOfCode21.InputHelper.read!("day_3_part_1")) do
     data
-  end
-
-  defp to_base_10_int(charlist) do
-    charlist
-    |> Enum.join()
-    |> String.to_integer(2)
   end
 
   def parse_instructions(instructions) do
