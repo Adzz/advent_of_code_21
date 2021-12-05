@@ -60,6 +60,49 @@ defmodule AdventOfCode21 do
     horizontal * depth
   end
 
+  @doc """
+  We have a matrix and we need to find the most and least common bit in each column, then
+  make a number out of it. The most common bit == Gamma, least == Epsilon
+      [
+        [0,0,1,0,0],
+        [1,1,1,1,0],
+        [1,0,1,1,0],
+      ]
+  So here Gamma == 10110, epsilon == 01100
+
+  Not actually clear if all the columns are the same what to do, or what to do if they are
+  equal? Assume they wont be? 🤷‍♂️
+
+  Also no effort to speed things up here.
+  """
+  def day_3_part_1(data \\ AdventOfCode21.InputHelper.read!("day_3_part_1")) do
+    {gamma, epsilon} =
+      data
+      |> to_list()
+      # We make it a list of strings to let us use enum. Could implement a String.zip instead.
+      |> Enum.map(&String.graphemes/1)
+      |> Enum.zip_reduce({[], []}, fn items, {gamma, epsilon} ->
+        %{"0" => zero_count, "1" => one_count} = Enum.frequencies(items)
+
+        gamma_digit = if zero_count > one_count, do: 0, else: 1
+        epsilon_digit = if zero_count > one_count, do: 1, else: 0
+
+        {[gamma_digit | gamma], [epsilon_digit | epsilon]}
+      end)
+
+    to_base_10_int(:lists.reverse(gamma)) * to_base_10_int(:lists.reverse(epsilon))
+  end
+
+  def day_3_part_2(data \\ AdventOfCode21.InputHelper.read!("day_3_part_1")) do
+    data
+  end
+
+  defp to_base_10_int(charlist) do
+    charlist
+    |> Enum.join()
+    |> String.to_integer(2)
+  end
+
   def parse_instructions(instructions) do
     Enum.map(instructions, fn
       "forward " <> amount -> {:forward, String.to_integer(amount)}

@@ -23,6 +23,21 @@ defmodule AdventOfCode21Test do
   forward 2
   """
 
+  @day_3_test_data """
+  00100
+  11110
+  10110
+  10111
+  10101
+  01111
+  00111
+  11100
+  10000
+  11001
+  00010
+  01010
+  """
+
   describe "day 1" do
     test "part 1" do
       assert AdventOfCode21.day_1_part_1() == 1226
@@ -44,6 +59,18 @@ defmodule AdventOfCode21Test do
     test "part 2" do
       assert AdventOfCode21.day_2_part_2(@day_2_test_data) == 900
       assert AdventOfCode21.day_2_part_2() == 1_848_454_425
+    end
+  end
+
+  describe "day 3" do
+    test "part 1" do
+      assert AdventOfCode21.day_3_part_1(@day_3_test_data) == 198
+      assert AdventOfCode21.day_3_part_1() == 2_250_414
+    end
+
+    test "part 2" do
+      # assert AdventOfCode21.day_3_part_2(@day_3_test_data) == 900
+      # assert AdventOfCode21.day_3_part_2() == 1_848_454_425
     end
   end
 end
