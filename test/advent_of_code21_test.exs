@@ -38,10 +38,12 @@ defmodule AdventOfCode21Test do
   describe "day 2" do
     test "part 1" do
       assert AdventOfCode21.day_2_part_1(@day_2_test_data) == 150
-      assert AdventOfCode21.day_2_part_1() == 1561344
+      assert AdventOfCode21.day_2_part_1() == 1_561_344
     end
 
     test "part 2" do
+      assert AdventOfCode21.day_2_part_2(@day_2_test_data) == 900
+      assert AdventOfCode21.day_2_part_2() == 1_848_454_425
     end
   end
 end

@@ -33,6 +33,33 @@ defmodule AdventOfCode21 do
     horizontal * depth
   end
 
+  @doc """
+    down X increases your aim by X units.
+    up X decreases your aim by X units.
+    forward X does two things:
+        It increases your horizontal position by X units.
+        It increases your depth by your aim multiplied by X.
+  """
+  # It's the same input but does something different.
+  def day_2_part_2(data \\ AdventOfCode21.InputHelper.read!("day_2_part_1")) do
+    {horizontal, depth, _aim} =
+      data
+      |> to_list()
+      |> Enum.map(&parse_instructions/1)
+      |> Enum.reduce({0, 0, 0}, fn
+        {:forward, amount}, {horizontal, depth, aim} ->
+          {horizontal + amount, depth + aim * amount, aim}
+
+        {:down, amount}, {horizontal, depth, aim} ->
+          {horizontal, depth, aim + amount}
+
+        {:up, amount}, {horizontal, depth, aim} ->
+          {horizontal, depth, aim - amount}
+      end)
+
+    horizontal * depth
+  end
+
   defp parse_instructions("forward " <> amount), do: {:forward, String.to_integer(amount)}
   defp parse_instructions("down " <> amount), do: {:down, String.to_integer(amount)}
   defp parse_instructions("up " <> amount), do: {:up, String.to_integer(amount)}
