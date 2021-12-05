@@ -6,24 +6,47 @@ defmodule AdventOfCode21 do
   See README, essentially recur through the list and see how many times the measurement
   is more than its previous measurement.
   """
-  def day_1_part_1(data \\ AdventOfCode21.InputHelper.read!("day_1")) do
+  def day_1_part_1(data \\ AdventOfCode21.InputHelper.read!("day_1_part_1")) do
     data
     |> parse_as_ints()
     |> count_increases()
   end
 
-  def day_1_part_2(data \\ AdventOfCode21.InputHelper.read!("day_2")) do
+  def day_1_part_2(data \\ AdventOfCode21.InputHelper.read!("day_1_part_2")) do
     data
     |> parse_as_ints()
     |> map_window(3, &Enum.sum/1)
     |> count_increases()
   end
 
+  def day_2_part_1(data \\ AdventOfCode21.InputHelper.read!("day_2_part_1")) do
+    {horizontal, depth} =
+      data
+      |> to_list()
+      |> Enum.map(&parse_instructions/1)
+      |> Enum.reduce({0, 0}, fn
+        {:forward, amount}, {horizontal, depth} -> {horizontal + amount, depth}
+        {:down, amount}, {horizontal, depth} -> {horizontal, depth + amount}
+        {:up, amount}, {horizontal, depth} -> {horizontal, depth - amount}
+      end)
+
+    horizontal * depth
+  end
+
+  defp parse_instructions("forward " <> amount), do: {:forward, String.to_integer(amount)}
+  defp parse_instructions("down " <> amount), do: {:down, String.to_integer(amount)}
+  defp parse_instructions("up " <> amount), do: {:up, String.to_integer(amount)}
+
   defp parse_as_ints(data) do
     data
+    |> to_list()
+    |> Enum.map(&elem(Integer.parse(&1), 0))
+  end
+
+  defp to_list(string) do
+    string
     |> String.trim()
     |> String.split("\n")
-    |> Enum.map(&elem(Integer.parse(&1), 0))
   end
 
   @doc """
