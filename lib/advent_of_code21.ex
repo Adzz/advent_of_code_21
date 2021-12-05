@@ -23,7 +23,7 @@ defmodule AdventOfCode21 do
     {horizontal, depth} =
       data
       |> to_list()
-      |> Enum.map(&parse_instructions/1)
+      |> parse_instructions()
       |> Enum.reduce({0, 0}, fn
         {:forward, amount}, {horizontal, depth} -> {horizontal + amount, depth}
         {:down, amount}, {horizontal, depth} -> {horizontal, depth + amount}
@@ -45,7 +45,7 @@ defmodule AdventOfCode21 do
     {horizontal, depth, _aim} =
       data
       |> to_list()
-      |> Enum.map(&parse_instructions/1)
+      |> parse_instructions()
       |> Enum.reduce({0, 0, 0}, fn
         {:forward, amount}, {horizontal, depth, aim} ->
           {horizontal + amount, depth + aim * amount, aim}
@@ -60,9 +60,13 @@ defmodule AdventOfCode21 do
     horizontal * depth
   end
 
-  defp parse_instructions("forward " <> amount), do: {:forward, String.to_integer(amount)}
-  defp parse_instructions("down " <> amount), do: {:down, String.to_integer(amount)}
-  defp parse_instructions("up " <> amount), do: {:up, String.to_integer(amount)}
+  def parse_instructions(instructions) do
+    Enum.map(instructions, fn
+      "forward " <> amount -> {:forward, String.to_integer(amount)}
+      "down " <> amount -> {:down, String.to_integer(amount)}
+      "up " <> amount -> {:up, String.to_integer(amount)}
+    end)
+  end
 
   defp parse_as_ints(data) do
     data
