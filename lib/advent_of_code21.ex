@@ -85,7 +85,7 @@ defmodule AdventOfCode21 do
         %{"0" => zero_count, "1" => one_count} = Enum.frequencies(items)
 
         gamma_digit = if zero_count > one_count, do: 0, else: 1
-        epsilon_digit = 1 - gamma_digit
+        epsilon_digit = flip_the_bit(gamma_digit)
 
         {gamma <> "#{gamma_digit}", epsilon <> "#{epsilon_digit}"}
       end)
@@ -94,8 +94,46 @@ defmodule AdventOfCode21 do
   end
 
   def day_3_part_2(data \\ AdventOfCode21.InputHelper.read!("day_3_part_1")) do
-    data
+    list = data |> to_list() |> Enum.map(&String.graphemes/1)
+
+    oxygen_bit_selector = fn zero_count, one_count ->
+      if zero_count > one_count, do: "0", else: "1"
+    end
+
+    co2_bit_selector = fn zero_count, one_count ->
+      if zero_count > one_count, do: "1", else: "0"
+    end
+
+    column = hd(Enum.zip_with(list, & &1))
+    oxygen = interpret(list, 0, column, oxygen_bit_selector)
+    co2 = interpret(list, 0, column, co2_bit_selector)
+
+    oxygen * co2
   end
+
+  defp interpret(rows, column_index, column, bit_selector) do
+    %{"0" => zero_count, "1" => one_count} = Enum.frequencies(column)
+    selected_bit = bit_selector.(zero_count, one_count)
+
+    rows
+    |> Enum.filter(fn row ->
+      Enum.at(row, column_index) == selected_bit
+    end)
+    |> case do
+      [remain] ->
+        remain |> Enum.join() |> String.to_integer(2)
+
+      remaining ->
+        interpret(
+          remaining,
+          column_index + 1,
+          Enum.at(Enum.zip_with(remaining, & &1), column_index + 1),
+          bit_selector
+        )
+    end
+  end
+
+  def flip_the_bit(bit), do: 1 - bit
 
   def parse_instructions(instructions) do
     Enum.map(instructions, fn

@@ -69,8 +69,8 @@ defmodule AdventOfCode21Test do
     end
 
     test "part 2" do
-      # assert AdventOfCode21.day_3_part_2(@day_3_test_data) == 900
-      # assert AdventOfCode21.day_3_part_2() == 1_848_454_425
+      assert AdventOfCode21.day_3_part_2(@day_3_test_data) == 230
+      assert AdventOfCode21.day_3_part_2() == 6085575
     end
   end
 end
