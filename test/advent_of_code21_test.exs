@@ -40,37 +40,37 @@ defmodule AdventOfCode21Test do
 
   describe "day 1" do
     test "part 1" do
-      assert AdventOfCode21.day_1_part_1() == 1226
-      assert AdventOfCode21.day_1_part_1(@day_1_test_data) == 7
+      assert AdventOfCode21.Day1.day_1_part_1() == 1226
+      assert AdventOfCode21.Day1.day_1_part_1(@day_1_test_data) == 7
     end
 
     test "part 2" do
-      assert AdventOfCode21.day_1_part_2(@day_1_test_data) == 5
-      assert AdventOfCode21.day_1_part_2() == 1252
+      assert AdventOfCode21.Day1.day_1_part_2(@day_1_test_data) == 5
+      assert AdventOfCode21.Day1.day_1_part_2() == 1252
     end
   end
 
   describe "day 2" do
     test "part 1" do
-      assert AdventOfCode21.day_2_part_1(@day_2_test_data) == 150
-      assert AdventOfCode21.day_2_part_1() == 1_561_344
+      assert AdventOfCode21.Day2.day_2_part_1(@day_2_test_data) == 150
+      assert AdventOfCode21.Day2.day_2_part_1() == 1_561_344
     end
 
     test "part 2" do
-      assert AdventOfCode21.day_2_part_2(@day_2_test_data) == 900
-      assert AdventOfCode21.day_2_part_2() == 1_848_454_425
+      assert AdventOfCode21.Day2.day_2_part_2(@day_2_test_data) == 900
+      assert AdventOfCode21.Day2.day_2_part_2() == 1_848_454_425
     end
   end
 
   describe "day 3" do
     test "part 1" do
-      assert AdventOfCode21.day_3_part_1(@day_3_test_data) == 198
-      assert AdventOfCode21.day_3_part_1() == 2_250_414
+      assert AdventOfCode21.Day3.day_3_part_1(@day_3_test_data) == 198
+      assert AdventOfCode21.Day3.day_3_part_1() == 2_250_414
     end
 
     test "part 2" do
-      assert AdventOfCode21.day_3_part_2(@day_3_test_data) == 230
-      assert AdventOfCode21.day_3_part_2() == 6085575
+      assert AdventOfCode21.Day3.day_3_part_2(@day_3_test_data) == 230
+      assert AdventOfCode21.Day3.day_3_part_2() == 6_085_575
     end
   end
 end
