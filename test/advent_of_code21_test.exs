@@ -98,8 +98,8 @@ defmodule AdventOfCode21Test do
 
   describe "day 4" do
     test "part 1" do
-      assert AdventOfCode21.Day4.day_4_part_1(@day_4_test_data) == 198
-      # assert AdventOfCode21.Day4.day_4_part_1() == 2_250_414
+      assert AdventOfCode21.Day4.day_4_part_1(@day_4_test_data) == 4512
+      assert AdventOfCode21.Day4.day_4_part_1() == 35670
     end
 
     test "part 2" do
