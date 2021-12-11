@@ -7,9 +7,8 @@ defmodule AdventOfCode21.Day4 do
 
   Boards are always 5 X 5 grids.
 
-  So let's pick a sensible  data structure.. a map right?
-  Winning things are rows and columns, so if we have a map for each then..
-
+  So let's pick a sensible  data structure.. a map right? WRONG
+  We can just make a board be a list of rows and a list of columns.
   """
   def day_4_part_1(data \\ AdventOfCode21.InputHelper.read!("day_4_part_1")) do
     [numbers_input | boards_input] = data |> String.split("\n\n", trim: true)
@@ -21,18 +20,20 @@ defmodule AdventOfCode21.Day4 do
 
   @doc """
   Okay so this one is all about "Which board wins last".... Which we can do by calling
-  day 1 and filtering the board that wins each time.
+  day 1 and filtering the board that wins each time? Ah no, the insight is:
+
+  The board that wins last will have their winning number further along the list of
+  input numbers. So we can just play bingo with each board and then sort them by how
+  far into the list their winning number is. Then get the head which'll be the winning
+  board.
+
+  This makes some assumptions like "there will always be a winner" and that "the input
+  numbers are always uniq" which seem to hold true.
   """
   def day_4_part_2(data \\ AdventOfCode21.InputHelper.read!("day_4_part_1")) do
     [numbers_input | boards_input] = data |> String.split("\n\n", trim: true)
     boards = to_boards(boards_input)
     numbers = numbers_input |> to_ints(",")
-
-    # We kind of need an id for the boards so we can see which one has "won".
-
-    # The other way is to see how many numbers it takes for each matrix to "win"
-    # Either by counting the numbers or by summing them. Like wont the highest number
-    # be the winner for
 
     {last_winner, last_number} =
       Enum.map(boards, fn board ->
@@ -40,7 +41,7 @@ defmodule AdventOfCode21.Day4 do
       end)
       |> Enum.sort_by(
         fn {_, last_number} ->
-          Enum.find_index(numbers, fn x -> x == last_number end)
+          Enum.find_index(numbers, &(&1 == last_number))
         end,
         &>=/2
       )
