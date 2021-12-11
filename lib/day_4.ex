@@ -12,34 +12,69 @@ defmodule AdventOfCode21.Day4 do
 
   """
   def day_4_part_1(data \\ AdventOfCode21.InputHelper.read!("day_4_part_1")) do
-    [numbers | boards] = data |> String.split("\n\n", trim: true)
+    [numbers_input | boards_input] = data |> String.split("\n\n", trim: true)
+    boards = to_boards(boards_input)
+    numbers = numbers_input |> to_ints(",")
+    {winning_board, last_number} = mark_boards_and_check_for_winner(numbers, boards)
+    sum_non_marked_numbers(winning_board) * last_number
+  end
 
-    boards =
-      boards
-      |> Enum.map(&String.split(&1, "\n", trim: true))
-      |> Enum.reduce([], fn board, acc ->
-        # Here we expand out the rows and columns so we can iterate through them easily.
-        # Is this matrix multiplication??
-        rows = board |> Enum.map(&to_ints(&1, " "))
-        columns = Enum.zip_with(rows, & &1)
-        [rows ++ columns | acc]
+  @doc """
+  Okay so this one is all about "Which board wins last".... Which we can do by calling
+  day 1 and filtering the board that wins each time.
+  """
+  def day_4_part_2(data \\ AdventOfCode21.InputHelper.read!("day_4_part_1")) do
+    [numbers_input | boards_input] = data |> String.split("\n\n", trim: true)
+    boards = to_boards(boards_input)
+    numbers = numbers_input |> to_ints(",")
+
+    # We kind of need an id for the boards so we can see which one has "won".
+
+    # The other way is to see how many numbers it takes for each matrix to "win"
+    # Either by counting the numbers or by summing them. Like wont the highest number
+    # be the winner for
+
+    {last_winner, last_number} =
+      Enum.map(boards, fn board ->
+        mark_boards_and_check_for_winner(numbers, [board])
       end)
+      |> Enum.sort_by(
+        fn {_, last_number} ->
+          Enum.find_index(numbers, fn x -> x == last_number end)
+        end,
+        &>=/2
+      )
+      |> hd()
 
-    numbers
-    |> to_ints(",")
-    |> Enum.reduce_while(boards, fn number, boards ->
+    sum_non_marked_numbers(last_winner) * last_number
+  end
+
+  def mark_boards_and_check_for_winner(numbers, boards) do
+    Enum.reduce_while(numbers, boards, fn number, boards ->
       Enum.reduce_while(boards, [], fn board, boards_acc ->
         checked = Enum.map(board, &check_line(&1, number))
 
         case winning_board?(checked) do
-          true -> {:halt, {:win, sum_non_marked_numbers(checked) * number}}
+          true -> {:halt, {:win, {checked, number}}}
           false -> {:cont, [checked | boards_acc]}
         end
       end)
       |> case do
-        {:win, count} -> {:halt, count}
+        {:win, {checked, number}} -> {:halt, {checked, number}}
         boards -> {:cont, boards}
       end
+    end)
+  end
+
+  def to_boards(input) do
+    input
+    |> Enum.map(&String.split(&1, "\n", trim: true))
+    |> Enum.reduce([], fn board, acc ->
+      # Here we expand out the rows and columns so we can iterate through them easily.
+      # Is this matrix multiplication??
+      rows = board |> Enum.map(&to_ints(&1, " "))
+      columns = Enum.zip_with(rows, & &1)
+      [rows ++ columns | acc]
     end)
   end
 
@@ -77,8 +112,5 @@ defmodule AdventOfCode21.Day4 do
     input
     |> String.split(split_on, trim: true)
     |> Enum.map(&String.to_integer/1)
-  end
-
-  def day_4_part_2(data \\ AdventOfCode21.InputHelper.read!("day_4_part_1")) do
   end
 end
