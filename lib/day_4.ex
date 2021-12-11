@@ -31,12 +31,7 @@ defmodule AdventOfCode21.Day4 do
       Enum.reduce_while(boards, [], fn board, boards_acc ->
         checked = Enum.map(board, &check_line(&1, number))
 
-        Enum.reduce_while(checked, false, fn
-          ["x", "x", "x", "x", "x"], _ -> {:halt, true}
-          _, _ -> {:cont, false}
-        end)
-        |> case do
-          # //the board here needs to include the latest markings.
+        case winning_board?(checked) do
           true -> {:halt, {:win, sum_non_marked_numbers(checked) * number}}
           false -> {:cont, [checked | boards_acc]}
         end
@@ -55,6 +50,18 @@ defmodule AdventOfCode21.Day4 do
   def check_line([a, b, c, number, e], number), do: [a, b, c, "x", e]
   def check_line([a, b, c, d, number], number), do: [a, b, c, d, "x"]
   def check_line(line, _), do: line
+
+  def winning_board?(board) do
+    Enum.reduce_while(board, false, fn line, _ ->
+      case won_line?(line) do
+        true -> {:halt, true}
+        false -> {:cont, false}
+      end
+    end)
+  end
+
+  def won_line?(["x", "x", "x", "x", "x"]), do: true
+  def won_line?(_), do: false
 
   def sum_non_marked_numbers(board) do
     non_marked_rows_and_columns_total =
