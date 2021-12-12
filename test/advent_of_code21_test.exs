@@ -60,6 +60,19 @@ defmodule AdventOfCode21Test do
    2  0 12  3  7
   """
 
+  @day_5_test_data """
+  0,9 -> 5,9
+  8,0 -> 0,8
+  9,4 -> 3,4
+  2,2 -> 2,1
+  7,0 -> 7,4
+  6,4 -> 2,0
+  0,9 -> 2,9
+  3,4 -> 1,4
+  0,0 -> 8,8
+  5,5 -> 8,2
+  """
+
   describe "day 1" do
     test "part 1" do
       assert AdventOfCode21.Day1.day_1_part_1() == 1226
@@ -105,6 +118,18 @@ defmodule AdventOfCode21Test do
     test "part 2" do
       assert AdventOfCode21.Day4.day_4_part_2(@day_4_test_data) == 1924
       assert AdventOfCode21.Day4.day_4_part_2() == 22704
+    end
+  end
+
+  describe "day 5" do
+    test "part 1" do
+      assert AdventOfCode21.Day5.day_5_part_1(@day_5_test_data) == 5
+      assert AdventOfCode21.Day5.day_5_part_1() == 4745
+    end
+
+    test "part 2" do
+      # assert AdventOfCode21.Day5.day_5_part_2(@day_5_test_data) == 1924
+      # assert AdventOfCode21.Day5.day_5_part_2() == 22704
     end
   end
 end
